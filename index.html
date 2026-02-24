@@ -1,0 +1,63 @@
+import zipfile
+
+Paths
+
+html_path = '/mnt/data/index.html' zip_path = '/mnt/data/Lulu_Store_Website.zip'
+
+الكود نفسه موجود في index.html بالفعل
+
+html_code = """<!DOCTYPE html>
+
+<html lang=\"ar\">
+<head>
+<meta charset=\"UTF-8\">
+<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+<title>Lulu Store</title>
+<link href=\"https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap\" rel=\"stylesheet\">
+<style>
+body{margin:0;font-family:'Cairo',sans-serif;background:#fff;}
+header{background:#ff7a00;color:#fff;padding:20px;text-align:center;}
+nav{display:flex;justify-content:center;gap:20px;padding:10px;background:#fff;}
+nav a{text-decoration:none;color:#ff7a00;font-weight:bold;}
+.container{padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;}
+.card{border:1px solid #eee;border-radius:10px;padding:15px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+.card img{width:100%;height:250px;object-fit:cover;border-radius:10px;}
+button{background:#ff7a00;color:#fff;border:none;padding:10px 15px;border-radius:5px;cursor:pointer;}
+.cart{position:fixed;bottom:20px;right:20px;background:#ff7a00;color:#fff;padding:15px;border-radius:50px;cursor:pointer;}
+footer{background:#ff7a00;color:#fff;text-align:center;padding:15px;margin-top:40px;}
+</style>
+</head>
+<body>
+<header>
+<h1>Lulu Store</h1>
+<p>أحدث صيحات الموضة</p>
+</header>
+<nav>
+<a href=\"https://www.facebook.com/share/1D2Wh3b64B/\" target=\"_blank\">Facebook</a>
+<a href=\"https://www.instagram.com/lulu.store.1974\" target=\"_blank\">Instagram</a>
+</nav>
+<div class=\"container\" id=\"products\"></div>
+<div class=\"cart\" onclick=\"sendWhatsApp()\">🛒 إرسال الطلب</div>
+<footer>
+<p>واتساب: 01515899765</p>
+<p>Gmail: lulustore1974@gmail.com</p>
+</footer>
+<script>
+let cart = [];
+const sheetID = \"13beC3jHDpm_hGlo0x9EHL2KJWDVosGLH\";
+const url = `https://opensheet.elk.sh/${sheetID}/Sheet1`;
+fetch(url).then(res => res.json()).then(data => { renderProducts(data); });
+function renderProducts(products){ const container = document.getElementById(\"products\"); container.innerHTML = \"\"; products.forEach((p,index)=>{ container.innerHTML += `<div class=\"card\"><img src=\"${p.image}\"><h3>${p.name}</h3><p>${p.price} جنيه</p><p>${p.description}</p><button onclick='addToCart(${JSON.stringify(p)})'>أضف للسلة</button></div>`; });}
+function addToCart(product){ cart.push(product); alert(\"تمت إضافة المنتج للسلة\");}
+function sendWhatsApp(){ if(cart.length===0){ alert(\"السلة فارغة\"); return; } let message = \"طلب جديد من Lulu Store:%0A\"; cart.forEach(p=>{ message += p.name + \" - \" + p.price + \" جنيه%0A\"; }); window.open(\"https://wa.me/201515899765?text=\"+message,\"_blank\");}
+</script>
+</body>
+</html>"""Save HTML file
+
+with open(html_path, 'w', encoding='utf-8') as f: f.write(html_code)
+
+Create ZIP
+
+with zipfile.ZipFile(zip_path, 'w') as zipf: zipf.write(html_path, 'index.html')
+
+zip_path
