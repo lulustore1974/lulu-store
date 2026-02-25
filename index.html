@@ -101,34 +101,32 @@ footer{
   <p>Gmail: lulustore1974@gmail.com</p>
 
   <div class="social">
-    <a href="https://facebook.com/PUT_YOUR_PAGE_LINK" target="_blank">Facebook</a>
-    <a href="https://instagram.com/PUT_YOUR_PAGE_LINK" target="_blank">Instagram</a>
+    <a href="https://facebook.com/PUT_YOUR_FACEBOOK" target="_blank">Facebook</a>
+    <a href="https://instagram.com/PUT_YOUR_INSTAGRAM" target="_blank">Instagram</a>
   </div>
 </footer>
 
 <script>
 let cart = [];
 
-/* ===== هنا تضيف المنتجات ===== */
+/* ===== عدل المنتجات هنا فقط ===== */
 const products = [
-  const products = [
   {
-    name: "عباية",
+    name: "عباية ",
     price: 350,
-    image: "https://ibb.co/nN8xv7yC",
-    description: "فستان قطن مريح وأنيق",
+    image: "https://i.ibb.co/placeholder1.jpg",
+    description: "عباية خامة ممتازة",
     code: "1111"
   },
   {
     name: "عباية",
-    price: 200,
-    image: "https://ibb.co/Rk3FYvrk",
-    description: "عباية خامة ممتازة",
+    price: 420,
+    image: "https://i.ibb.co/placeholder2.jpg",
+    description: "عباية شيك جدا",
     code: "2222"
   }
 ];
-];
-/* ============================= */
+/* ================================= */
 
 function renderProducts(){
     const container = document.getElementById("products");
@@ -141,7 +139,7 @@ function renderProducts(){
             <h3>${p.name}</h3>
             <p>${p.price} EGP</p>
             <p>${p.description}</p>
-             <p>${p.code}</p>
+            <p>كود المنتج: ${p.code}</p>
             <button onclick='addToCart(${JSON.stringify(p)})'>أضف للسلة</button>
         </div>`;
     });
@@ -160,7 +158,7 @@ function sendWhatsApp(){
 
     let message = "طلب جديد:%0A";
     cart.forEach(p=>{
-        message += p.code + " - " +  p.name + " - " + p.price + " EGP%0A";
+        message += "كود: " + p.code + " - " + p.name + " - " + p.price + " EGP%0A";
     });
 
     window.open("https://wa.me/201515899765?text=" + message, "_blank");
@@ -171,5 +169,3 @@ renderProducts();
 
 </body>
 </html>
-
-
