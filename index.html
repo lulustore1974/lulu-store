@@ -7,12 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-:root {
-  --primary-color:#ff7a00;
-  --secondary-color:#ffffff;
-  --text-color:#333;
-}
-
 body{
   margin:0;
   font-family:'Cairo',sans-serif;
@@ -101,36 +95,39 @@ footer{
 <script>
 let cart = [];
 
-const sheetID = "1Hj_CgpaDkfCH9llC_Ax0lSScs3j0s0Rl";
-const sheetName = "Sheet1";
-const url = `https://opensheet.elk.sh/${sheetID}/${sheetName}`;
+/* المنتجات هنا مباشرة */
+const products = [
+  {
+    name: "فستان بناتي",
+    price: 350,
+    image: "https://via.placeholder.com/300x300",
+    description: "فستان قطن مريح وأنيق"
+  },
+  {
+    name: "تيشيرت رجالي",
+    price: 200,
+    image: "https://via.placeholder.com/300x300",
+    description: "تيشيرت خامة ممتازة"
+  },
+  {
+    name: "حذاء رياضي",
+    price: 500,
+    image: "https://via.placeholder.com/300x300",
+    description: "حذاء مريح للمشي والجري"
+  }
+];
 
-fetch(url)
-.then(res => res.json())
-.then(data => {
-    if(!data || data.length === 0){
-        document.getElementById("products").innerHTML =
-        "<p style='text-align:center'>لا توجد منتجات حالياً</p>";
-        return;
-    }
-    renderProducts(data);
-})
-.catch(error => {
-    document.getElementById("products").innerHTML =
-    "<p style='text-align:center'>حدث خطأ في تحميل المنتجات</p>";
-});
-
-function renderProducts(products){
+function renderProducts(){
     const container = document.getElementById("products");
     container.innerHTML = "";
 
     products.forEach(p => {
         container.innerHTML += `
         <div class="card">
-            <img src="${p.image || ''}">
-            <h3>${p.name || ''}</h3>
-            <p>${p.price || ''} جنيه</p>
-            <p>${p.description || ''}</p>
+            <img src="${p.image}">
+            <h3>${p.name}</h3>
+            <p>${p.price} جنيه</p>
+            <p>${p.description}</p>
             <button onclick='addToCart(${JSON.stringify(p)})'>أضف للسلة</button>
         </div>`;
     });
@@ -154,6 +151,8 @@ function sendWhatsApp(){
 
     window.open("https://wa.me/201515899765?text=" + message, "_blank");
 }
+
+renderProducts();
 </script>
 
 </body>
