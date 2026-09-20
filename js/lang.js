@@ -4,7 +4,8 @@ const D={
 };
 const R={"عباية":"Abaya","عباية خامة ممتازة":"Premium-quality abaya","عباية شيك جدا":"Elegant abaya","إكسسوارات":"Accessories","حريمي":"Women","رجالي":"Men","أطفال":"Kids","أحذية":"Shoes","شنط":"Bags","مفروشات منزلية":"Home furnishings"};
 let english=localStorage.getItem("lulu_lang")==="en";
-function tr(v){if(!v)return v;let t=v.trim();if(D[t])return D[t];if(R[t])return R[t];let m=t.match(/^(\d+) منتج$/);if(m)return m[1]+" "+(m[1]==="1"?"product":"products");m=t.match(/^(\d+) جنيه$/);if(m)return m[1]+" EGP";return v}
+const REV=Object.fromEntries(Object.entries(D).map(([k,v])=>[v,k])),RREV=Object.fromEntries(Object.entries(R).map(([k,v])=>[v,k]));
+function tr(v){if(!v)return v;let t=v.trim();if(english){if(D[t])return D[t];if(R[t])return R[t];let m=t.match(/^(\\d+) منتج$/);if(m)return m[1]+" "+(m[1]==="1"?"product":"products");m=t.match(/^(\\d+) جنيه$/);if(m)return m[1]+" EGP"}else{if(REV[t])return REV[t];if(RREV[t])return RREV[t];let m=t.match(/^(\\d+) (product|products)$/);if(m)return m[1]+" "+(m[1]==="1"?"منتج":"منتجات");m=t.match(/^(\\d+) EGP$/);if(m)return m[1]+" جنيه"}return v}
 function translateNode(n){if(n.nodeType!==3)return;const raw=n.nodeValue,trim=raw.trim();if(!trim)return;const out=tr(trim);if(out!==trim)n.nodeValue=raw.replace(trim,out)}
 function apply(){
 document.documentElement.lang=english?"en":"ar";document.documentElement.dir=english?"ltr":"rtl";
