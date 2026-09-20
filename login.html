@@ -26,7 +26,6 @@ h1{font-size:32px;margin:0 0 8px}p{color:var(--m);line-height:1.8}.field{margin:
 </div>
 <a class="secondary" href="signup.html">عميل جديد؟ إنشاء حساب</a>
 <a class="secondary" href="https://wa.me/201515899765" target="_blank" rel="noopener">الدعم الفني عبر واتساب</a>
-
 <p class="small"><a href="index.html">العودة إلى المتجر</a></p>
 </section></main>
 <script type="module">
@@ -34,15 +33,16 @@ import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+e
 const normalizePhone=s=>{let v=String(s||'').trim().replace(/\D/g,'');if(v.startsWith('20'))v='0'+v.slice(2);if(v.length===10&&v.startsWith('1'))v='0'+v;return /^01[0-9]{9}$/.test(v)?v:null};
 const customerEmail=p=>'customer.'+p.replace(/\D/g,'')+'@lulustore1974.com';
 const next=new URLSearchParams(location.search).get('next')||'index.html';
-async function redirectIfLoggedIn(){const{data:{session}}=await sb.auth.getSession();if(session){const role=session.user.app_metadata?.role;if(role==='admin'){location.href='admin.html';return}if(session.user.app_metadata?.role==='customer')location.href=next&&!next.startsWith('admin')?next:'index.html'}}
+async function redirectIfLoggedIn(){const{data:{session}}=await sb.auth.getSession();if(session){const role=session.user.app_metadata?.role;if(role==='admin'){location.href='admin.html';return}if(role==='customer')location.href=next&&!next.startsWith('admin')?next:'index.html'}}
 redirectIfLoggedIn();
 const msg=document.getElementById('msg');const $=id=>document.getElementById(id);function show(t,ok=false){msg.className='msg '+(ok?'success':'');msg.textContent=t}
 $('resetStart').onclick=()=>{const phone=normalizePhone($('identifier').value);if(!phone){show('اكتب رقم الهاتف أولاً.');return}$('resetBox').style.display='block';show('اطلب كود إعادة التعيين من الدعم الفني ثم اكتبه هنا.')};
 $('resetSave').onclick=async()=>{const phone=normalizePhone($('identifier').value),code=$('resetCode').value.trim(),p=$('newPassword').value,p2=$('newPassword2').value;if(!phone||code.length!==6||p.length<6||p!==p2){show('تأكد من رقم الهاتف والكود وكلمة المرور الجديدة.');return}show('جارٍ حفظ كلمة المرور الجديدة...');const{error}=await sb.rpc('customer_reset_password',{p_phone:phone,p_code:code,p_new_password:p});if(error){show(error.message||'تعذر إعادة تعيين كلمة المرور.');return}show('تم تغيير كلمة المرور. يمكنك تسجيل الدخول الآن.',true);$('password').value=p;$('resetBox').style.display='none'};
 document.getElementById('login').onclick=async()=>{const identifier=document.getElementById('identifier').value.trim(),password=document.getElementById('password').value;const phone=normalizePhone(identifier);const isManagerEmail=identifier.includes('@');if((!phone&&!isManagerEmail)||!password){show('أدخل رقم الهاتف وكلمة المرور.');return}show('جارٍ الدخول...');let loginEmail=identifier;
-if(!isManagerEmail){
-  const {data:aliasData}=await sb.rpc('customer_login_email',{p_phone:phone});
-  loginEmail=aliasData||customerEmail(phone);
-}
-const{data,error}=await sb.auth.signInWithPassword({email:loginEmail,password});if(error){show('رقم الهاتف أو كلمة المرور غير صحيحة.');return}location.href=next&&!next.startsWith('admin')?next:'index.html'};
-</script>\n</body></html>
+if(!isManagerEmail){const{data:aliasData}=await sb.rpc('customer_login_email',{p_phone:phone});loginEmail=aliasData||customerEmail(phone)}
+const{data,error}=await sb.auth.signInWithPassword({email:loginEmail,password});if(error){show('رقم الهاتف أو كلمة المرور غير صحيحة.');return}
+const role=data.user?.app_metadata?.role;
+if(role==='admin'){location.href='admin.html';return}
+location.href=next&&!next.startsWith('admin')?next:'index.html'};
+</script>
+</body></html>
