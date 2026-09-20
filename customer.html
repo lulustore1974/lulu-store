@@ -13,7 +13,7 @@ main{padding:38px 0 70px}.head{display:flex;justify-content:space-between;align-
 </style></head>
 <body>
 <header class="header"><div class="container nav"><a class="brand" href="index.html"><span class="mark">L</span><strong>Lulu Store</strong></a><div class="actions"><a class="btn" href="index.html">المتجر</a><button class="btn primary" id="logout">تسجيل الخروج</button></div></div></header>
-<main class="container"><div class="head"><div><h1>طلباتي</h1><div class="muted">تابعي حالة كل طلب وتفاصيل المنتجات.</div></div></div><div id="orders"><div class="empty">جاري تحميل الطلبات...</div></div></main>
+<main class="container"><div class="head"><div><h1>طلباتي</h1><div class="muted">متابعة حالة كل طلب وتفاصيل المنتجات.</div></div></div><div id="orders"><div class="empty">جاري تحميل الطلبات...</div></div></main>
 <script type="module">
 import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 import{SUPABASE_URL,SUPABASE_KEY}from'./js/config.js';
@@ -25,7 +25,7 @@ async function load(){
  if(!session){location.href='login.html?next=customer.html';return}
  const{data:orders,error}=await sb.from('orders').select('id,customer_name,phone,governorate,address,total,status,created_at,order_items(product_name,price,size,color,quantity,subtotal,product_id)').eq('customer_id',session.user.id).order('created_at',{ascending:false});
  if(error){root.innerHTML='<div class="empty">تعذر تحميل الطلبات حالياً.</div>';return}
- if(!orders?.length){root.innerHTML='<div class="empty"><h2>لا توجد طلبات بعد</h2><p class="muted">عندما تسجلين أول طلب سيظهر هنا وتقدري تتابعي حالته.</p><a class="btn primary" href="index.html">ابدئي التسوق</a></div>';return}
+ if(!orders?.length){root.innerHTML='<div class="empty"><h2>لا توجد طلبات بعد</h2><p class="muted">عند تسجيل أول طلب سيظهر هنا ويمكن متابعة حالته.</p><a class="btn primary" href="index.html">ابدأ التسوق</a></div>';return}
  const ids=[...new Set(orders.flatMap(o=>(o.order_items||[]).map(i=>i.product_id)).filter(Boolean))];
  let imgs={};
  if(ids.length){const r=await sb.from('product_images').select('product_id,image_url,sort_order').in('product_id',ids).order('sort_order');(r.data||[]).forEach(x=>{if(!imgs[x.product_id])imgs[x.product_id]=x.image_url})}
