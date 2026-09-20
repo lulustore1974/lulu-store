@@ -17,6 +17,13 @@ h1{font-size:32px;margin:0 0 8px}p{color:var(--m);line-height:1.8}.field{margin:
 <div class="field"><label for="identifier">رقم الهاتف</label><input id="identifier" type="tel" inputmode="tel" autocomplete="tel" placeholder="+2010xxxxxxxx"></div>
 <div class="field"><label for="password">كلمة المرور</label><input id="password" type="password" autocomplete="current-password"></div>
 <button class="btn" id="login">دخول</button>
+<button class="secondary" id="resetStart" type="button">نسيت كلمة المرور؟</button>
+<div id="resetBox" style="display:none;margin-top:14px;padding:14px;background:#faf7f4;border-radius:12px">
+<div class="field"><label for="resetCode">كود إعادة التعيين</label><input id="resetCode" inputmode="numeric" maxlength="6"></div>
+<div class="field"><label for="newPassword">كلمة المرور الجديدة</label><input id="newPassword" type="password" minlength="6"></div>
+<div class="field"><label for="newPassword2">تأكيد كلمة المرور الجديدة</label><input id="newPassword2" type="password" minlength="6"></div>
+<button class="btn" id="resetSave" type="button">حفظ كلمة المرور الجديدة</button>
+</div>
 <a class="secondary" href="signup.html">عميل جديد؟ إنشاء حساب</a>
 <a class="secondary" href="https://wa.me/201515899765" target="_blank" rel="noopener">الدعم الفني عبر واتساب</a>
 
@@ -29,7 +36,9 @@ const customerEmail=p=>'customer.'+p.replace(/\D/g,'')+'@lulustore.local';
 const next=new URLSearchParams(location.search).get('next')||'index.html';
 async function redirectIfLoggedIn(){const{data:{session}}=await sb.auth.getSession();if(session){const role=session.user.app_metadata?.role;if(role==='admin'){location.href='admin.html';return}if(session.user.app_metadata?.role==='customer')location.href=next&&!next.startsWith('admin')?next:'index.html'}}
 redirectIfLoggedIn();
-const msg=document.getElementById('msg');function show(t,ok=false){msg.className='msg '+(ok?'success':'');msg.textContent=t}
+const msg=document.getElementById('msg');const $=id=>document.getElementById(id);function show(t,ok=false){msg.className='msg '+(ok?'success':'');msg.textContent=t}
+$('resetStart').onclick=()=>{const phone=normalizePhone($('identifier').value);if(!phone){show('اكتب رقم الهاتف أولاً.');return}$('resetBox').style.display='block';show('اطلب كود إعادة التعيين من الدعم الفني ثم اكتبه هنا.')};
+$('resetSave').onclick=async()=>{const phone=normalizePhone($('identifier').value),code=$('resetCode').value.trim(),p=$('newPassword').value,p2=$('newPassword2').value;if(!phone||code.length!==6||p.length<6||p!==p2){show('تأكد من رقم الهاتف والكود وكلمة المرور الجديدة.');return}show('جارٍ حفظ كلمة المرور الجديدة...');const{error}=await sb.rpc('customer_reset_password',{p_phone:phone,p_code:code,p_new_password:p});if(error){show(error.message||'تعذر إعادة تعيين كلمة المرور.');return}show('تم تغيير كلمة المرور. يمكنك تسجيل الدخول الآن.',true);$('password').value=p;$('resetBox').style.display='none'};
 document.getElementById('login').onclick=async()=>{const identifier=document.getElementById('identifier').value.trim(),password=document.getElementById('password').value;const phone=normalizePhone(identifier);const isManagerEmail=identifier.includes('@');if((!phone&&!isManagerEmail)||!password){show('أدخل رقم الهاتف وكلمة المرور.');return}show('جارٍ الدخول...');let loginEmail=identifier;
 if(!isManagerEmail){
   const {data:aliasData}=await sb.rpc('customer_login_email',{p_phone:phone});
