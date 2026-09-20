@@ -40,7 +40,7 @@ window.removeItem=i=>{cart.splice(i,1);localStorage.setItem('lulu_cart',JSON.str
 document.getElementById('submit').onclick=async()=>{
  if(!cart.length){msg.textContent='السلة فارغة.';return}
  const customer_name=document.getElementById('name').value.trim(),phone=document.getElementById('phone').value.trim(),gov=document.getElementById('gov').value.trim(),address=document.getElementById('address').value.trim(),notes=document.getElementById('notes').value.trim();
- if(!customer_name||!phone||!address){msg.textContent='أكملي الاسم ورقم الهاتف والعنوان.';return}
+ if(!customer_name||!phone||!address){msg.textContent='أكمل الاسم ورقم الهاتف والعنوان.';return}
  msg.textContent='جارٍ تسجيل الطلب...';
  const{data,error}=await sb.rpc('place_order',{p_customer_name:customer_name,p_phone:phone,p_governorate:gov,p_address:address,p_notes:notes,p_items:cart.map(x=>({product_id:x.id,quantity:x.quantity}))});
  if(error){msg.textContent='تعذر تسجيل الطلب حالياً.';return}
