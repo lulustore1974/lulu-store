@@ -20,7 +20,7 @@ main.container{padding:42px 0 70px}.section-head h2{font-size:28px;margin:0 0 6p
 <header class="site-header"><div class="container nav">
 <a class="brand" href="index.html"><span class="brand-mark">L</span><strong>Lulu Store</strong></a>
 <nav class="actions">
-<a class="nav-btn" href="login.html" id="authBtn">تسجيل الدخول</a>
+<a class="nav-btn" href="login.html?next=index.html" id="authBtn">تسجيل الدخول</a>
 <button class="nav-btn primary" id="cartBtn" style="display:none">السلة <span class="count" id="cartCount">0</span></button>
 </nav>
 </div></header>
@@ -74,7 +74,7 @@ async function load(){
  cats.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{category=b.dataset.id;cats.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');render()});
  render();refreshCount();
  const s=await getSession();
- if(s){cartBtn.style.display='inline-flex';authBtn.textContent='حسابي';authBtn.href='index.html';authBtn.onclick=async e=>{e.preventDefault();await sb.auth.signOut();location.reload()}}
+ if(s){cartBtn.style.display='inline-flex';authBtn.textContent='تسجيل الخروج';authBtn.href='#';authBtn.onclick=async e=>{e.preventDefault();await sb.auth.signOut();location.reload()}}
 }
 load();
 </script>
