@@ -14,7 +14,7 @@ h1{font-size:32px;margin:0 0 8px}p{color:var(--m);line-height:1.8}.field{margin:
 <a class="brand" href="index.html"><span class="mark">L</span><strong>Lulu Store</strong></a>
 <h1>تسجيل الدخول</h1><p>بيانات الحساب</p>
 <div id="msg"></div>
-<div class="field"><label for="email">البريد الإلكتروني</label><input id="email" type="email" autocomplete="email"></div>
+<div class="field"><label for="identifier">رقم الهاتف</label><input id="identifier" type="tel" inputmode="tel" autocomplete="tel" placeholder="+2010xxxxxxxx"></div>
 <div class="field"><label for="password">كلمة المرور</label><input id="password" type="password" autocomplete="current-password"></div>
 <button class="btn" id="login">دخول</button>
 <a class="secondary" href="signup.html">عميل جديد؟ إنشاء حساب</a>
@@ -26,7 +26,7 @@ h1{font-size:32px;margin:0 0 8px}p{color:var(--m);line-height:1.8}.field{margin:
 import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';import{SUPABASE_URL,SUPABASE_KEY}from'./js/config.js';
 const sb=createClient(SUPABASE_URL,SUPABASE_KEY),msg=document.getElementById('msg'),next=new URLSearchParams(location.search).get('next')||'index.html';
 function show(t,ok=false){msg.className='msg '+(ok?'success':'');msg.textContent=t}
-const registered=new URLSearchParams(location.search).get('registered');if(registered)show('تم إنشاء الحساب. إذا كان البريد يحتاج تأكيداً، افتح رسالة التأكيد ثم سجّل الدخول.',true);
+const registered=new URLSearchParams(location.search).get('registered');if(registered)show('تم إنشاء الحساب بنجاح. يمكنك تسجيل الدخول برقم الهاتف وكلمة المرور.',true);
 async function redirectIfLoggedIn(){const{data:{session}}=await sb.auth.getSession();if(session){const role=session.user.app_metadata?.role;if(role==='admin')location.href='admin.html';else location.href=next && !next.startsWith('admin')?next:'index.html'}}
 redirectIfLoggedIn();
 document.getElementById('login').onclick=async()=>{
