@@ -12,7 +12,7 @@ h1{font-size:32px;margin:0 0 8px}p{color:var(--m);line-height:1.8}.field{margin:
 </style></head>
 <body><main class="wrap"><section class="card">
 <a class="brand" href="index.html"><span class="mark">L</span><strong>Lulu Store</strong></a>
-<h1>تسجيل الدخول</h1><p>أدخلي بيانات حسابك للمتابعة.</p>
+<h1>تسجيل الدخول</h1><p>بيانات الحساب</p>
 <div id="msg"></div>
 <div class="field"><label for="email">البريد الإلكتروني</label><input id="email" type="email" autocomplete="email"></div>
 <div class="field"><label for="password">كلمة المرور</label><input id="password" type="password" autocomplete="current-password"></div>
@@ -26,7 +26,7 @@ const sb=createClient(SUPABASE_URL,SUPABASE_KEY),msg=document.getElementById('ms
 function show(t,ok=false){msg.className='msg '+(ok?'success':'');msg.textContent=t}
 document.getElementById('login').onclick=async()=>{
  const email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;
- if(!email||!password){show('أدخلي البريد الإلكتروني وكلمة المرور.');return}
+ if(!email||!password){show('أدخل البريد الإلكتروني وكلمة المرور.');return}
  show('جارٍ التحقق...');
  const{data,error}=await sb.auth.signInWithPassword({email,password});
  if(error){show('بيانات الدخول غير صحيحة أو الحساب يحتاج إلى تأكيد البريد الإلكتروني.');return}
