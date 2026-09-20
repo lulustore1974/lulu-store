@@ -36,7 +36,7 @@ function friendlySignupError(error){
  if(s.includes('invalid email')) return 'البريد الإلكتروني غير صحيح. راجع كتابته وحاول مرة أخرى.';
  if(s.includes('password')) return 'كلمة المرور غير مقبولة. استخدم كلمة مرور من 6 أحرف أو أكثر.';
  if(s.includes('email')&&s.includes('disabled')) return 'إنشاء الحساب بالبريد الإلكتروني غير مفعّل حاليًا.';
- return 'تعذر إنشاء الحساب حاليًا. راجع البيانات وحاول مرة أخرى.';
+ return `تعذر إنشاء الحساب حاليًا: ${error?.message || 'خطأ غير معروف'}${error?.code ? ` (code: ${error.code})` : ''}`;
 }
 signupBtn.onclick=async()=>{
  const name=document.getElementById('name').value.trim(),email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;
