@@ -7,7 +7,7 @@
 :root{--accent:#b85d35;--dark:#211a17;--muted:#756b65;--bg:#f7f2ed;--card:#fff;--line:#eadfd7}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,Tahoma,sans-serif;background:var(--bg);color:var(--dark)}
 a{text-decoration:none;color:inherit}button{font:inherit;cursor:pointer}.container{width:min(1180px,92%);margin:auto}
-.site-header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}.nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:14px}.brand{display:flex;align-items:center;gap:10px}.brand-mark{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--dark);color:#fff;font-weight:800;font-size:21px}.brand strong{font-size:22px}.actions{display:flex;gap:8px}.nav-btn{border:1px solid var(--line);background:#fff;padding:10px 15px;border-radius:12px;font-weight:700}.nav-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}.count{display:inline-grid;place-items:center;min-width:22px;height:22px;background:#fff;color:var(--accent);border-radius:50%;margin-right:5px}.menu{position:absolute;top:62px;right:0;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 30px #2b1a1018;min-width:170px;overflow:hidden;z-index:30}.menu a{display:block;padding:13px 16px;font-weight:700}.menu a:hover{background:#f8f1ed}.nav{position:relative}
+.site-header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}.nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:14px}.brand{display:flex;align-items:center;gap:10px}.brand-mark{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--dark);color:#fff;font-weight:800;font-size:21px}.brand strong{font-size:22px}.actions{display:flex;gap:8px}.nav-btn{border:1px solid var(--line);background:#fff;padding:10px 15px;border-radius:12px;font-weight:700}.nav-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}.count{display:inline-grid;place-items:center;min-width:22px;height:22px;background:#fff;color:var(--accent);border-radius:50%;margin-right:5px}.menu{position:absolute;top:62px;right:0;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 30px #2b1a1018;min-width:190px;overflow:hidden;z-index:30}.menu a{display:block;padding:13px 16px;font-weight:700}.menu a:hover{background:#f8f1ed}.nav{position:relative}
 .hero{padding:62px 0;background:linear-gradient(135deg,#fff,#f0e0d5)}.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}.hero h1{font-size:clamp(38px,6vw,64px);line-height:1.15;margin:0 0 16px}.hero h1 span{color:var(--accent)}.hero p{font-size:17px;color:var(--muted);line-height:2;margin:0 0 24px}.hero-card{min-height:310px;border-radius:28px;padding:30px;background:linear-gradient(145deg,#211a17,#9a5c40);color:#fff;display:flex;flex-direction:column;justify-content:flex-end}.hero-card .big{font-size:32px;font-weight:800}.hero-card h2{margin:8px 0}
 main.container{padding:42px 0 70px}.section-head h2{font-size:28px;margin:0 0 6px}.section-head p{color:var(--muted);margin:0}.categories{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 32px}.chip{padding:9px 15px;border:1px solid var(--line);background:#fff;border-radius:30px;font-weight:700}.chip.active{background:var(--dark);color:#fff}
 .products{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}.product{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;cursor:pointer;transition:transform .18s,box-shadow .18s}.product:hover{transform:translateY(-3px);box-shadow:0 10px 24px #2b1a1012}.product-img{height:280px;background:#eee}.product-img img{width:100%;height:100%;object-fit:cover}.product-body{padding:17px}.product-body h3{margin:0 0 7px}.product-body p{color:var(--muted);min-height:42px;line-height:1.7}.price{font-size:20px;font-weight:800;color:var(--accent);margin:10px 0}.add{width:100%;padding:12px;border:0;border-radius:11px;background:var(--dark);color:#fff;font-weight:700}.empty{padding:35px;background:#fff;border:1px dashed #d5c8be;border-radius:18px;text-align:center;grid-column:1/-1}
@@ -23,7 +23,7 @@ main.container{padding:42px 0 70px}.section-head h2{font-size:28px;margin:0 0 6p
 <a class="nav-btn" href="login.html?next=index.html" id="authBtn">تسجيل الدخول</a>
 <button class="nav-btn" id="menuBtn" aria-label="القائمة" style="display:none">☰</button>
 <button class="nav-btn primary" id="cartBtn" style="display:none">السلة <span class="count" id="cartCount">0</span></button>
-<div id="menu" class="menu" style="display:none"><a href="customer.html">طلباتي</a><a href="https://wa.me/201515899765" target="_blank" rel="noopener">الدعم الفني عبر واتساب</a><a href="#" id="logoutBtn">تسجيل الخروج</a></div>
+<div id="menu" class="menu" style="display:none"><a href="customer.html">طلباتي</a><a href="reset-password.html">إعادة تعيين كلمة المرور</a><a href="https://wa.me/201515899765" target="_blank" rel="noopener">الدعم الفني عبر واتساب</a><a href="#" id="logoutBtn">تسجيل الخروج</a></div>
 </nav>
 </div></header>
 
@@ -46,7 +46,7 @@ import{SUPABASE_URL,SUPABASE_KEY}from'./js/config.js';
 const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
 const cartBtn=document.getElementById('cartBtn'),menuBtn=document.getElementById('menuBtn'),menu=document.getElementById('menu'),logoutBtn=document.getElementById('logoutBtn'),grid=document.getElementById('productGrid'),cats=document.getElementById('cats'),count=document.getElementById('cartCount'),authBtn=document.getElementById('authBtn');
 let products=[],category='all';
-async function getSession(){return( await sb.auth.getSession()).data.session}
+async function getSession(){return(await sb.auth.getSession()).data.session}
 function getCart(){try{return JSON.parse(localStorage.getItem('lulu_cart')||'[]')}catch{return[]}}
 function refreshCount(){count.textContent=getCart().reduce((n,x)=>n+Number(x.quantity||0),0)}
 async function openCart(){const s=await getSession();location.href=s?'checkout.html':'login.html?next=checkout.html'}
@@ -80,4 +80,4 @@ async function load(){
 }
 load();
 </script>
-\n</body></html>
+</body></html>
