@@ -11,7 +11,7 @@ h1{font-size:32px;margin:0 0 8px}p{color:var(--m);line-height:1.8}.field{margin:
 </style></head>
 <body><main class="wrap"><section class="card">
 <a class="brand" href="index.html"><span class="mark">L</span><strong>Lulu Store</strong></a>
-<h1>إنشاء حساب جديد</h1><p>أنشئي حسابك لإتمام الطلبات واستخدام السلة.</p>
+<h1>إنشاء حساب جديد</h1><p>إنشاء حساب لاستخدام السلة وإتمام الطلبات.</p>
 <div id="msg"></div>
 <div class="field"><label for="name">الاسم بالكامل</label><input id="name" autocomplete="name"></div>
 <div class="field"><label for="email">البريد الإلكتروني</label><input id="email" type="email" autocomplete="email"></div>
@@ -25,11 +25,11 @@ const sb=createClient(SUPABASE_URL,SUPABASE_KEY),msg=document.getElementById('ms
 function show(t,ok=false){msg.className='msg '+(ok?'success':'');msg.textContent=t}
 document.getElementById('signup').onclick=async()=>{
  const name=document.getElementById('name').value.trim(),email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;
- if(!name||!email||password.length<6){show('أكملي الاسم والبريد الإلكتروني وكلمة المرور (6 أحرف على الأقل).');return}
+ if(!name||!email||password.length<6){show('أكمل الاسم والبريد الإلكتروني وكلمة المرور (6 أحرف على الأقل).');return}
  show('جارٍ إنشاء الحساب...');
  const{data,error}=await sb.auth.signUp({email,password,options:{data:{name}}});
  if(error){show('تعذر إنشاء الحساب بهذه البيانات.');return}
  if(data.session){location.href=next;return}
- show('تم إنشاء الحساب. افتحي رسالة التأكيد على بريدك الإلكتروني، ثم سجلي الدخول.',true);
+ show('تم إنشاء الحساب. افتح رسالة التأكيد على البريد الإلكتروني، ثم استخدم تسجيل الدخول.',true);
 };
 </script></body></html>
