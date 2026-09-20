@@ -44,7 +44,7 @@ document.getElementById('submit').onclick=async()=>{
  msg.textContent='جارٍ تسجيل الطلب...';
  const{data,error}=await sb.rpc('place_order',{p_customer_name:customer_name,p_phone:phone,p_governorate:gov,p_address:address,p_notes:notes,p_items:cart.map(x=>({product_id:x.id,quantity:x.quantity}))});
  if(error){msg.textContent='تعذر تسجيل الطلب حالياً.';return}
- localStorage.removeItem('lulu_cart');cart=[];render();msg.className='msg success';msg.textContent='تم تسجيل الطلب بنجاح. رقم الطلب: '+data;
+ localStorage.removeItem('lulu_cart');cart=[];render();msg.className='msg success';msg.innerHTML='تم تسجيل الطلب بنجاح. رقم الطلب: <b>'+data.toString().slice(0,8)+'</b><br><br><a href="customer.html" style="display:inline-block;padding:10px 14px;background:#b85d35;color:#fff;border-radius:10px;text-decoration:none;font-weight:700">متابعة طلباتي</a>';
 };
 init();
 </script></body></html>
