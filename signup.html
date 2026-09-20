@@ -21,12 +21,14 @@ h1{font-size:32px;margin:0 0 8px}p{color:var(--m);line-height:1.8}.field{margin:
 <a class="secondary" href="https://wa.me/201515899765" target="_blank" rel="noopener">الدعم الفني عبر واتساب</a>
 
 </section></main>
-<script type="module">\nimport{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';import{SUPABASE_URL,SUPABASE_KEY}from'./js/config.js';const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
+<script type="module">
+import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';import{SUPABASE_URL,SUPABASE_KEY}from'./js/config.js';const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
 const normalizePhone=s=>{const v=String(s||'').trim();return /^\+?[0-9]{8,15}$/.test(v)?(v.startsWith('+')?v:'+'+v):null};
-const getCustomer=()=>{try{return JSON.parse(localStorage.getItem('lulu_customer')||'null')}catch{return null}};
-const msg=document.getElementById('msg'),next=new URLSearchParams(location.search).get('next')||'index.html';
-function show(t,ok=false){msg.className='msg '+(ok?'success':'');msg.textContent=t}
-async function redirectIfLoggedIn(){const{data:{session}}=await sb.auth.getSession();if(session&&session.user.app_metadata?.role==='admin'){location.href='admin.html';return}if(getCustomer())location.href=next&&!next.startsWith('admin')?next:'index.html'}
+const customerEmail=p=>'customer.'+p.replace(/\D/g,'')+'@lulustore.local';
+const next=new URLSearchParams(location.search).get('next')||'index.html';
+async function redirectIfLoggedIn(){const{data:{session}}=await sb.auth.getSession();if(session){const role=session.user.app_metadata?.role;if(role==='admin'){location.href='admin.html';return}if(session.user.app_metadata?.role==='customer')location.href=next&&!next.startsWith('admin')?next:'index.html'}}
 redirectIfLoggedIn();
-document.getElementById('signup').onclick=async()=>{const name=document.getElementById('name').value.trim(),phone=normalizePhone(document.getElementById('phone').value),password=document.getElementById('password').value;if(!name||!phone||password.length<6){show('أكمل الاسم ورقم الهاتف وكلمة المرور (6 أحرف على الأقل).');return}const btn=document.getElementById('signup');btn.disabled=true;btn.textContent='جارٍ إنشاء الحساب...';show('جارٍ إنشاء الحساب...');try{const{data,error}=await sb.rpc('customer_signup',{p_name:name,p_phone:phone,p_password:password});if(error){const m=(error.message||'').toLowerCase();show(m.includes('phone_exists')?'رقم الهاتف مستخدم بالفعل. جرّب تسجيل الدخول.':m.includes('invalid_phone')?'رقم الهاتف غير صحيح.':m.includes('weak_password')?'كلمة المرور يجب أن تكون 6 أحرف على الأقل.':'تعذر إنشاء الحساب حاليًا. حاول مرة أخرى.');return}localStorage.setItem('lulu_customer',JSON.stringify(data));show('تم إنشاء الحساب بنجاح، جارٍ فتح المتجر...',true);setTimeout(()=>location.href=next,400)}finally{btn.disabled=false;btn.textContent='إنشاء الحساب'}};
-\n</script>\n</body></html>
+const msg=document.getElementById('msg');function show(t,ok=false){msg.className='msg '+(ok?'success':'');msg.textContent=t}
+document.getElementById('signup').onclick=async()=>{const name=document.getElementById('name').value.trim(),phone=normalizePhone(document.getElementById('phone').value),password=document.getElementById('password').value;if(!name||!phone||password.length<6){show('أكمل الاسم ورقم الهاتف وكلمة المرور (6 أحرف على الأقل).');return}const btn=document.getElementById('signup');btn.disabled=true;btn.textContent='جارٍ إنشاء الحساب...';show('جارٍ إنشاء الحساب...');try{const{data,error}=await sb.auth.signUp({email:customerEmail(phone),password,options:{data:{name}}});if(error){const m=(error.message||'').toLowerCase();show(m.includes('already')?'رقم الهاتف مستخدم بالفعل. جرّب تسجيل الدخول.':m.includes('password')?'كلمة المرور غير مقبولة. استخدم 6 أحرف على الأقل.':'تعذر إنشاء الحساب حاليًا. حاول مرة أخرى.');return}if(!data.session){show('الحساب تم إنشاؤه، لكن إعداد تأكيد البريد ما زال مفعّلًا في Supabase. أوقف Confirm Email ثم جرّب مرة أخرى.',false);return}show('تم إنشاء الحساب بنجاح، جارٍ فتح المتجر...',true);setTimeout(()=>location.href=next,400)}finally{btn.disabled=false;btn.textContent='إنشاء الحساب'}};
+
+</script>\n</body></html>
