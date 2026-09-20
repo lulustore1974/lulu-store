@@ -46,4 +46,4 @@ function renderCats(){$('catsList').innerHTML=cats.map(c=>'<div class="item" sty
 window.deleteCat=async id=>{if(!confirm('حذف القسم؟ يجب ألا يحتوي على منتجات.'))return;const r=await sb.from('categories').delete().eq('id',id);if(r.error)alert('لا يمكن حذف القسم إذا كان مرتبطاً بمنتجات.');else load()};
 $('addCat').onclick=async()=>{const name=$('catName').value.trim(),slug=$('catSlug').value.trim();if(!name||!slug)return;const r=await sb.from('categories').insert({name,slug,active:true,sort_order:cats.length});if(r.error)alert(r.error.message);else{$('catName').value='';$('catSlug').value='';load()}};
 $('productSearch').oninput=renderProducts;$('productCatFilter').onchange=renderProducts;$('orderSearch').oninput=renderOrders;$('orderStatus').onchange=renderOrders;$('logout').onclick=async()=>{await sb.auth.signOut();location.href='login.html'};load();
-</script><script src="./js/lang.js"></script>\n</body></html>
+</script>\n</body></html>
