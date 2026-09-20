@@ -63,7 +63,7 @@ window.addToCart=add;
 function render(){
  const list=category==='all'?products:products.filter(p=>p.category_id===category);
  document.getElementById('resultText').textContent=list.length+' منتج';
- grid.innerHTML=list.length?list.map(p=>'<article class="product" onclick="location.href='product.html?id='+encodeURIComponent(p.id)"><div class="product-img"><img loading="lazy" src="'+(p.image||'')+'" alt="'+p.name+'"></div><div class="product-body"><h3>'+p.name+'</h3><p>'+((p.description||'').replaceAll('<','&lt;'))+'</p><div class="price">'+Number(p.price).toLocaleString('ar-EG')+' جنيه</div><button class="add" onclick="event.stopPropagation();addToCart(\''+p.id+'\')">أضف للسلة</button></div></article>').join(''):'<div class="empty">لا توجد منتجات في هذا القسم حالياً.</div>';
+ grid.innerHTML=list.length?list.map(p=>'<article class="product" onclick="location.href=\'product.html?id=\'+encodeURIComponent(p.id)"><div class="product-img"><img loading="lazy" src="'+(p.image||'')+'" alt="'+p.name+'"></div><div class="product-body"><h3>'+p.name+'</h3><p>'+((p.description||'').replaceAll('<','&lt;'))+'</p><div class="price">'+Number(p.price).toLocaleString('ar-EG')+' جنيه</div><button class="add" onclick="event.stopPropagation();addToCart(\''+p.id+'\')">أضف للسلة</button></div></article>').join(''):'<div class="empty">لا توجد منتجات في هذا القسم حالياً.</div>';
 }
 async function load(){
  const[c,p]=await Promise.all([
