@@ -28,7 +28,7 @@ main.container{padding:42px 0 70px}.section-head h2{font-size:28px;margin:0 0 6p
 </div></header>
 
 <section class="hero"><div class="container hero-grid">
-<div><h1>منتجاتك من <span>Lulu Store</span></h1><p>تصفحي الأقسام والمنتجات، ثم أضف المنتجات التي تريدها إلى السلة.</p><a class="nav-btn primary" href="#products">تصفح المنتجات</a></div>
+<div><h1>منتجاتك من <span>Lulu Store</span></h1><p>تصفح الأقسام والمنتجات، ثم أضف المنتجات التي تريدها إلى السلة.</p><a class="nav-btn primary" href="#products">تصفح المنتجات</a></div>
 <div class="hero-card"><div class="big">LULU</div><h2>اختياراتك في مكان واحد</h2></div>
 </div></section>
 
@@ -46,7 +46,7 @@ import{SUPABASE_URL,SUPABASE_KEY}from'./js/config.js';
 const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
 const cartBtn=document.getElementById('cartBtn'),menuBtn=document.getElementById('menuBtn'),menu=document.getElementById('menu'),logoutBtn=document.getElementById('logoutBtn'),grid=document.getElementById('productGrid'),cats=document.getElementById('cats'),count=document.getElementById('cartCount'),authBtn=document.getElementById('authBtn');
 let products=[],category='all';
-async function getSession(){return(await sb.auth.getSession()).data.session}
+async function getSession(){return( await sb.auth.getSession()).data.session}
 function getCart(){try{return JSON.parse(localStorage.getItem('lulu_cart')||'[]')}catch{return[]}}
 function refreshCount(){count.textContent=getCart().reduce((n,x)=>n+Number(x.quantity||0),0)}
 async function openCart(){const s=await getSession();location.href=s?'checkout.html':'login.html?next=checkout.html'}
