@@ -32,7 +32,7 @@ h1{font-size:32px;margin:0 0 8px}p{color:var(--m);line-height:1.8}.field{margin:
 <script type="module">
 import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';import{SUPABASE_URL,SUPABASE_KEY}from'./js/config.js';const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
 const normalizePhone=s=>{let v=String(s||'').trim().replace(/\D/g,'');if(v.startsWith('20'))v='0'+v.slice(2);if(v.length===10&&v.startsWith('1'))v='0'+v;return /^01[0-9]{9}$/.test(v)?v:null};
-const customerEmail=p=>'customer.'+p.replace(/\D/g,'')+'@lulustore.local';
+const customerEmail=p=>'customer.'+p.replace(/\D/g,'')+'@lulustore1974.com';
 const next=new URLSearchParams(location.search).get('next')||'index.html';
 async function redirectIfLoggedIn(){const{data:{session}}=await sb.auth.getSession();if(session){const role=session.user.app_metadata?.role;if(role==='admin'){location.href='admin.html';return}if(session.user.app_metadata?.role==='customer')location.href=next&&!next.startsWith('admin')?next:'index.html'}}
 redirectIfLoggedIn();
