@@ -27,7 +27,7 @@ import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+e
 const normalizePhone=s=>{let v=String(s||'').trim().replace(/\D/g,'');if(v.startsWith('20'))v='0'+v.slice(2);if(v.length===10&&v.startsWith('1'))v='0'+v;return /^01[0-9]{9}$/.test(v)?v:null};
 const customerEmail=p=>'customer.'+p.replace(/\D/g,'')+'@lulustore1974.com';
 const next=new URLSearchParams(location.search).get('next')||'index.html';
-async function redirectIfLoggedIn(){const{data:{session}}=await sb.auth.getSession();if(session){const role=session.user.app_metadata?.role;if(role==='admin'){location.href='admin-v2.html';return}if(role==='customer')location.href=next&&!next.startsWith('admin')?next:'index.html'}}
+async function redirectIfLoggedIn(){const{data:{session}}=await sb.auth.getSession();if(session){const role=session.user.app_metadata?.role;if(role==='admin'){location.href='admin-v3.html';return}if(role==='customer')location.href=next&&!next.startsWith('admin')?next:'index.html'}}
 redirectIfLoggedIn();
 const msg=document.getElementById('msg');const $=id=>document.getElementById(id);function show(t,ok=false){msg.className='msg '+(ok?'success':'');msg.textContent=t}
 $('resetStart').onclick=async()=>{const phone=normalizePhone($('identifier').value);if(!phone){show('اكتب رقم الهاتف أولاً.');return}const{data,error}=await sb.rpc('customer_request_password_reset',{p_phone:phone});if(error||data!==true){show('تعذر إرسال الطلب. تأكد من رقم الهاتف.');return}show('تم إرسال طلب إعادة تعيين كلمة المرور للدعم الفني. انتظر تواصل الدعم معك.',true)};
