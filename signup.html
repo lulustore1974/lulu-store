@@ -27,13 +27,28 @@ const sb=createClient(SUPABASE_URL,SUPABASE_KEY),msg=document.getElementById('ms
 function show(t,ok=false){msg.className='msg '+(ok?'success':'');msg.textContent=t}
 async function redirectIfLoggedIn(){const{data:{session}}=await sb.auth.getSession();if(session){const role=session.user.app_metadata?.role;if(role==='admin')location.href='admin.html';else location.href=next && !next.startsWith('admin')?next:'index.html'}}
 redirectIfLoggedIn();
-document.getElementById('signup').onclick=async()=>{
+const signupBtn=document.getElementById('signup');
+const loginUrl=location.origin+location.pathname.replace(/[^/]*$/,'')+'login.html';
+function friendlySignupError(error){
+ const s=((error?.message||'')+' '+(error?.code||'')).toLowerCase();
+ if(s.includes('already registered')||s.includes('already been registered')||s.includes('user already exists')) return 'هذا البريد الإلكتروني مستخدم بالفعل. جرّب تسجيل الدخول بدلًا من إنشاء حساب جديد.';
+ if(s.includes('rate limit')||s.includes('too many requests')) return 'تم تجاوز حد المحاولات مؤقتًا. انتظر قليلًا ثم جرّب مرة أخرى.';
+ if(s.includes('invalid email')) return 'البريد الإلكتروني غير صحيح. راجع كتابته وحاول مرة أخرى.';
+ if(s.includes('password')) return 'كلمة المرور غير مقبولة. استخدم كلمة مرور من 6 أحرف أو أكثر.';
+ if(s.includes('email')&&s.includes('disabled')) return 'إنشاء الحساب بالبريد الإلكتروني غير مفعّل حاليًا.';
+ return 'تعذر إنشاء الحساب حاليًا. راجع البيانات وحاول مرة أخرى.';
+}
+signupBtn.onclick=async()=>{
  const name=document.getElementById('name').value.trim(),email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;
  if(!name||!email||password.length<6){show('أكمل الاسم والبريد الإلكتروني وكلمة المرور (6 أحرف على الأقل).');return}
+ signupBtn.disabled=true;signupBtn.textContent='جارٍ إنشاء الحساب...';
  show('جارٍ إنشاء الحساب...');
- const{data,error}=await sb.auth.signUp({email,password,options:{data:{name,emailRedirectTo:location.origin+location.pathname.replace(/[^/]*$/,'')+'login.html'}}});
- if(error){show('تعذر إنشاء الحساب بهذه البيانات.');return}
- if(data.session){show('تم إنشاء الحساب بنجاح، جارٍ فتح المتجر...',true);setTimeout(()=>location.href=next,500);return}
- show('تم إنشاء الحساب بنجاح. أرسلنا رسالة تأكيد إلى بريدك الإلكتروني. افتح الرسالة واضغط زر التأكيد، وبعدها ستنتقل لتسجيل الدخول. لن يظهر لك هذا الخطأ.',true);
+ try{
+  const{data,error}=await sb.auth.signUp({email,password,options:{data:{name},emailRedirectTo:loginUrl}});
+  if(error){show(friendlySignupError(error));return}
+  if(data.session){show('تم إنشاء الحساب بنجاح، جارٍ فتح المتجر...',true);setTimeout(()=>location.href=next,500);return}
+  show('تم إنشاء الحساب بنجاح. أرسلنا رسالة تأكيد إلى بريدك الإلكتروني. افتح الرسالة واضغط زر التأكيد، وبعدها سجّل الدخول من هنا.',true);
+ }catch(e){show('تعذر الاتصال بخدمة إنشاء الحساب. تأكد من اتصال الإنترنت وحاول مرة أخرى.');}
+ finally{signupBtn.disabled=false;signupBtn.textContent='إنشاء الحساب'}
 };
 </script>\n</body></html>
