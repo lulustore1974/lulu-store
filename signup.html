@@ -14,7 +14,7 @@ h1{font-size:32px;margin:0 0 8px}p{color:var(--m);line-height:1.8}.field{margin:
 <h1>إنشاء حساب جديد</h1><p>إنشاء حساب لاستخدام السلة وإتمام الطلبات.</p>
 <div id="msg"></div>
 <div class="field"><label for="name">الاسم بالكامل</label><input id="name" autocomplete="name"></div>
-<div class="field"><label for="email">البريد الإلكتروني</label><input id="email" type="email" autocomplete="email"></div>
+<div class="field"><label for="phone">رقم الهاتف</label><input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+2010xxxxxxxx"></div>
 <div class="field"><label for="password">كلمة المرور</label><input id="password" type="password" autocomplete="new-password"></div>
 <button class="btn" id="signup">إنشاء الحساب</button>
 <a class="secondary" href="login.html">لديك حساب؟ تسجيل الدخول</a>
@@ -28,26 +28,26 @@ function show(t,ok=false){msg.className='msg '+(ok?'success':'');msg.textContent
 async function redirectIfLoggedIn(){const{data:{session}}=await sb.auth.getSession();if(session){const role=session.user.app_metadata?.role;if(role==='admin')location.href='admin.html';else location.href=next && !next.startsWith('admin')?next:'index.html'}}
 redirectIfLoggedIn();
 const signupBtn=document.getElementById('signup');
-const loginUrl=location.origin+location.pathname.replace(/[^/]*$/,'')+'login.html';
 function friendlySignupError(error){
  const s=((error?.message||'')+' '+(error?.code||'')).toLowerCase();
- if(s.includes('already registered')||s.includes('already been registered')||s.includes('user already exists')) return 'هذا البريد الإلكتروني مستخدم بالفعل. جرّب تسجيل الدخول بدلًا من إنشاء حساب جديد.';
+ if(s.includes('already registered')||s.includes('already been registered')||s.includes('user already exists')) return 'رقم الهاتف مستخدم بالفعل. جرّب تسجيل الدخول بدلًا من إنشاء حساب جديد.';
  if(s.includes('rate limit')||s.includes('too many requests')) return 'تم تجاوز حد المحاولات مؤقتًا. انتظر قليلًا ثم جرّب مرة أخرى.';
- if(s.includes('invalid email')) return 'البريد الإلكتروني غير صحيح. راجع كتابته وحاول مرة أخرى.';
+ if(s.includes('invalid phone')) return 'رقم الهاتف غير صحيح. استخدم الصيغة الدولية مثل +2010xxxxxxxx.';
  if(s.includes('password')) return 'كلمة المرور غير مقبولة. استخدم كلمة مرور من 6 أحرف أو أكثر.';
- if(s.includes('email')&&s.includes('disabled')) return 'إنشاء الحساب بالبريد الإلكتروني غير مفعّل حاليًا.';
+ 
  return `تعذر إنشاء الحساب حاليًا: ${error?.message || 'خطأ غير معروف'}${error?.code ? ` (code: ${error.code})` : ''}`;
 }
 signupBtn.onclick=async()=>{
- const name=document.getElementById('name').value.trim(),email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;
- if(!name||!email||password.length<6){show('أكمل الاسم والبريد الإلكتروني وكلمة المرور (6 أحرف على الأقل).');return}
+ const name=document.getElementById('name').value.trim(),identifier=document.getElementById('phone').value.trim(),password=document.getElementById('password').value;
+ const phone=/^\+?[0-9]{8,15}$/.test(identifier)?(identifier.startsWith('+')?identifier:'+'+identifier):null;
+ if(!name||!phone||password.length<6){show('أكمل الاسم ورقم الهاتف وكلمة المرور (6 أحرف على الأقل).');return}
  signupBtn.disabled=true;signupBtn.textContent='جارٍ إنشاء الحساب...';
  show('جارٍ إنشاء الحساب...');
  try{
-  const{data,error}=await sb.auth.signUp({email,password,options:{data:{name},emailRedirectTo:loginUrl}});
+  const{data,error}=await sb.auth.signUp({phone,password,options:{data:{name}}});
   if(error){show(friendlySignupError(error));return}
   if(data.session){show('تم إنشاء الحساب بنجاح، جارٍ فتح المتجر...',true);setTimeout(()=>location.href=next,500);return}
-  show('تم إنشاء الحساب بنجاح. أرسلنا رسالة تأكيد إلى بريدك الإلكتروني. افتح الرسالة واضغط زر التأكيد، وبعدها سجّل الدخول من هنا.',true);
+  show('تم إنشاء الحساب بنجاح. جارٍ فتح المتجر...',true);setTimeout(()=>location.href=next,500);
  }catch(e){show('تعذر الاتصال بخدمة إنشاء الحساب. تأكد من اتصال الإنترنت وحاول مرة أخرى.');}
  finally{signupBtn.disabled=false;signupBtn.textContent='إنشاء الحساب'}
 };
