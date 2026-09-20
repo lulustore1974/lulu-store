@@ -18,11 +18,15 @@ h1{font-size:32px;margin:0 0 8px}p{color:var(--m);line-height:1.8}.field{margin:
 <div class="field"><label for="password">كلمة المرور</label><input id="password" type="password" autocomplete="new-password"></div>
 <button class="btn" id="signup">إنشاء الحساب</button>
 <a class="secondary" href="login.html">لديك حساب؟ تسجيل الدخول</a>
+<a class="secondary" href="mailto:lulustore1974@gmail.com?subject=دعم%20فني%20-%20Lulu%20Store">الدعم الفني</a>
+
 </section></main>
 <script type="module">
 import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';import{SUPABASE_URL,SUPABASE_KEY}from'./js/config.js';
 const sb=createClient(SUPABASE_URL,SUPABASE_KEY),msg=document.getElementById('msg'),next=new URLSearchParams(location.search).get('next')||'index.html';
 function show(t,ok=false){msg.className='msg '+(ok?'success':'');msg.textContent=t}
+async function redirectIfLoggedIn(){const{data:{session}}=await sb.auth.getSession();if(session){const role=session.user.app_metadata?.role;if(role==='admin')location.href='admin.html';else location.href=next && !next.startsWith('admin')?next:'index.html'}}
+redirectIfLoggedIn();
 document.getElementById('signup').onclick=async()=>{
  const name=document.getElementById('name').value.trim(),email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;
  if(!name||!email||password.length<6){show('أكمل الاسم والبريد الإلكتروني وكلمة المرور (6 أحرف على الأقل).');return}
@@ -30,6 +34,6 @@ document.getElementById('signup').onclick=async()=>{
  const{data,error}=await sb.auth.signUp({email,password,options:{data:{name}}});
  if(error){show('تعذر إنشاء الحساب بهذه البيانات.');return}
  if(data.session){location.href=next;return}
- show('تم إنشاء الحساب. افتح رسالة التأكيد على البريد الإلكتروني، ثم استخدم تسجيل الدخول.',true);
+ location.href='login.html?registered=1&next='+encodeURIComponent(next);
 };
 </script>\n</body></html>
