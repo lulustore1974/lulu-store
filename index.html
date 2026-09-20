@@ -21,6 +21,7 @@ main.container{padding:42px 0 70px}.section-head h2{font-size:28px;margin:0 0 6p
 <a class="brand" href="index.html"><span class="brand-mark">L</span><strong>Lulu Store</strong></a>
 <nav class="actions">
 <a class="nav-btn" href="login.html?next=index.html" id="authBtn">تسجيل الدخول</a>
+<a class="nav-btn" href="customer.html" id="ordersBtn" style="display:none">طلباتي</a>
 <button class="nav-btn primary" id="cartBtn" style="display:none">السلة <span class="count" id="cartCount">0</span></button>
 </nav>
 </div></header>
@@ -42,7 +43,7 @@ main.container{padding:42px 0 70px}.section-head h2{font-size:28px;margin:0 0 6p
 import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 import{SUPABASE_URL,SUPABASE_KEY}from'./js/config.js';
 const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
-const cartBtn=document.getElementById('cartBtn'),grid=document.getElementById('productGrid'),cats=document.getElementById('cats'),count=document.getElementById('cartCount'),authBtn=document.getElementById('authBtn');
+const cartBtn=document.getElementById('cartBtn'),ordersBtn=document.getElementById('ordersBtn'),grid=document.getElementById('productGrid'),cats=document.getElementById('cats'),count=document.getElementById('cartCount'),authBtn=document.getElementById('authBtn');
 let products=[],category='all';
 async function getSession(){return(await sb.auth.getSession()).data.session}
 function getCart(){try{return JSON.parse(localStorage.getItem('lulu_cart')||'[]')}catch{return[]}}
@@ -74,7 +75,7 @@ async function load(){
  cats.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{category=b.dataset.id;cats.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');render()});
  render();refreshCount();
  const s=await getSession();
- if(s){cartBtn.style.display='inline-flex';authBtn.textContent='تسجيل الخروج';authBtn.href='#';authBtn.onclick=async e=>{e.preventDefault();await sb.auth.signOut();location.reload()}}
+ if(s){cartBtn.style.display='inline-flex';ordersBtn.style.display='inline-flex';authBtn.textContent='تسجيل الخروج';authBtn.href='#';authBtn.onclick=async e=>{e.preventDefault();await sb.auth.signOut();location.reload()}}
 }
 load();
 </script>
