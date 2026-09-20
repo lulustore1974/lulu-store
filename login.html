@@ -22,11 +22,13 @@ h1{font-size:32px;margin:0 0 8px}p{color:var(--m);line-height:1.8}.field{margin:
 
 <p class="small"><a href="index.html">العودة إلى المتجر</a></p>
 </section></main>
-<script type="module">\nimport{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';import{SUPABASE_URL,SUPABASE_KEY}from'./js/config.js';const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
+<script type="module">
+import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';import{SUPABASE_URL,SUPABASE_KEY}from'./js/config.js';const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
 const normalizePhone=s=>{const v=String(s||'').trim();return /^\+?[0-9]{8,15}$/.test(v)?(v.startsWith('+')?v:'+'+v):null};
-const getCustomer=()=>{try{return JSON.parse(localStorage.getItem('lulu_customer')||'null')}catch{return null}};
-const msg=document.getElementById('msg'),next=new URLSearchParams(location.search).get('next')||'index.html';
-function show(t,ok=false){msg.className='msg '+(ok?'success':'');msg.textContent=t}
-async function redirectIfLoggedIn(){const{data:{session}}=await sb.auth.getSession();if(session&&session.user.app_metadata?.role==='admin'){location.href='admin.html';return}if(getCustomer())location.href=next&&!next.startsWith('admin')?next:'index.html'}
+const customerEmail=p=>'customer.'+p.replace(/\D/g,'')+'@lulustore.local';
+const next=new URLSearchParams(location.search).get('next')||'index.html';
+async function redirectIfLoggedIn(){const{data:{session}}=await sb.auth.getSession();if(session){const role=session.user.app_metadata?.role;if(role==='admin'){location.href='admin.html';return}if(session.user.app_metadata?.role==='customer')location.href=next&&!next.startsWith('admin')?next:'index.html'}}
 redirectIfLoggedIn();
-document.getElementById('login').onclick=async()=>{const phone=normalizePhone(document.getElementById('identifier').value),password=document.getElementById('password').value;if(!phone||!password){show('أدخل رقم الهاتف وكلمة المرور.');return}show('جارٍ الدخول...');const{data,error}=await sb.rpc('customer_login',{p_phone:phone,p_password:password});if(error){show('رقم الهاتف أو كلمة المرور غير صحيحة.');return}localStorage.setItem('lulu_customer',JSON.stringify(data));location.href=next&&!next.startsWith('admin')?next:'index.html'};\n</script>\n</body></html>
+const msg=document.getElementById('msg');function show(t,ok=false){msg.className='msg '+(ok?'success':'');msg.textContent=t}
+document.getElementById('login').onclick=async()=>{const phone=normalizePhone(document.getElementById('identifier').value),password=document.getElementById('password').value;if(!phone||!password){show('أدخل رقم الهاتف وكلمة المرور.');return}show('جارٍ الدخول...');const{data,error}=await sb.auth.signInWithPassword({email:customerEmail(phone),password});if(error){show('رقم الهاتف أو كلمة المرور غير صحيحة.');return}location.href=next&&!next.startsWith('admin')?next:'index.html'};
+</script>\n</body></html>
