@@ -30,6 +30,8 @@ document.getElementById('login').onclick=async()=>{
  show('جارٍ التحقق...');
  const{data,error}=await sb.auth.signInWithPassword({email,password});
  if(error){show('بيانات الدخول غير صحيحة أو الحساب يحتاج إلى تأكيد البريد الإلكتروني.');return}
- location.href=data.user.app_metadata?.role==='admin'?'admin.html':next;
+ const role=data.user.app_metadata?.role;
+if(role==='admin'){location.href='admin.html';return}
+location.href=next && !next.startsWith('admin')?next:'index.html';
 };
 </script><script src="./js/lang.js"></script>\n</body></html>
