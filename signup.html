@@ -31,9 +31,9 @@ document.getElementById('signup').onclick=async()=>{
  const name=document.getElementById('name').value.trim(),email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;
  if(!name||!email||password.length<6){show('أكمل الاسم والبريد الإلكتروني وكلمة المرور (6 أحرف على الأقل).');return}
  show('جارٍ إنشاء الحساب...');
- const{data,error}=await sb.auth.signUp({email,password,options:{data:{name}}});
+ const{data,error}=await sb.auth.signUp({email,password,options:{data:{name,emailRedirectTo:location.origin+location.pathname.replace(/[^/]*$/,'')+'login.html'}}});
  if(error){show('تعذر إنشاء الحساب بهذه البيانات.');return}
- if(data.session){location.href=next;return}
- location.href='login.html?registered=1&next='+encodeURIComponent(next);
+ if(data.session){show('تم إنشاء الحساب بنجاح، جارٍ فتح المتجر...',true);setTimeout(()=>location.href=next,500);return}
+ show('تم إنشاء الحساب بنجاح. أرسلنا رسالة تأكيد إلى بريدك الإلكتروني. افتح الرسالة واضغط زر التأكيد، وبعدها ستنتقل لتسجيل الدخول. لن يظهر لك هذا الخطأ.',true);
 };
 </script>\n</body></html>
